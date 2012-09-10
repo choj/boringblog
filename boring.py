@@ -122,6 +122,7 @@ def dashboard():
         c.execute("INSERT INTO post (user_id, create_date, edit_date, body, count) VALUES (?,?,?,?,?)", (s['user_id'], create_date, False, body, count))
         conn.commit()
         c.close()
+        return template('dashboard', email = s['email'], user_id = s['user_id'])
         
     elif 'email' in s:
         conn = connectDB()
