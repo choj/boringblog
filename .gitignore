@@ -6,3 +6,9 @@
 *.lock
 
 .DS_Store
+
+b/index.html
+
+b/style.css
+
+b/style2.css
