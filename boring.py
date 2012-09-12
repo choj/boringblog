@@ -20,7 +20,7 @@ def connectDB():
 @route('/register', method=['GET','POST'])
 def register():
     if 0('register','').strip():
-        email = request.GET.get('email', '').strip()
+        email = request.POST.get('email', '').strip()
         join_date = datetime.datetime.now().isoformat()
         last_login = False
         blog_name = re.search('([^@]+)', email).group(0)
@@ -30,8 +30,8 @@ def register():
             return template('register.tpl', error = "bad_email")
         
         # check passwords match
-        password = request.GET.get('password', '').strip()
-        confirm = request.GET.get('confirm', '').strip()
+        password = request.POST.get('password', '').strip()
+        confirm = request.POST.get('confirm', '').strip()
         if password != confirm:
             return template('register.tpl', error = "pw_mismatch")
         password = hashlib.sha512(str.encode(password)).hexdigest()
