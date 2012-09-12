@@ -2,7 +2,7 @@ import sqlite3
 import re
 import datetime
 import hashlib
-from bottle import route, run, debug, template, request, validate, static_file, error, app, redirect
+from bottle import route, run, debug, template, request, validate, static_file, error, app, redirect, post, get
 from beaker.middleware import SessionMiddleware
 
 session_opts = {
@@ -17,10 +17,9 @@ def connectDB():
     conn = sqlite3.connect('boring.db')
     return conn
 
-
-@route('/register', method='GET')
+@route('/register', method=['GET','POST'])
 def register():
-    if request.GET.get('register','').strip():
+    if 0('register','').strip():
         email = request.GET.get('email', '').strip()
         join_date = datetime.datetime.now().isoformat()
         last_login = False
@@ -72,13 +71,13 @@ def register():
     else:
         return template('register.tpl', error = False)
     
-    
-@route('/login', method='GET')
+#@post('/login')
+@route('/login', method=['GET','POST'])
 def login():
     s = request.environ.get('beaker.session')
-    if request.GET.get('login','').strip():
-        email = request.GET.get('email', '').strip()
-        password = request.GET.get('password', '').strip()
+    if request.forms.get('login','').strip():
+        email = request.forms.get('email', '').strip()
+        password = request.forms.get('password', '').strip()
         password = hashlib.sha512(str.encode(password)).hexdigest()
         
         # connect to db
@@ -103,16 +102,17 @@ def login():
     else:
         return template('login.tpl', error = False) 
 
-@route('/dashboard',  method='GET')
+#@route('/dashboard',  method='POST')
+@route('/dashboard', method=['GET','POST'])
 def dashboard():
     s = request.environ.get('beaker.session')
     
-    if 'email' in s and request.GET.get('post','').strip():
+    if 'email' in s and request.POST.get('post','').strip():
     
         create_date = datetime.datetime.now().isoformat()
         
         # needs more processing, remove excess linebreaks etc.
-        body = request.GET.get('post','').strip() 
+        body = request.POST.get('post','').strip() 
         
         conn = connectDB()
         c = conn.cursor()
@@ -135,7 +135,7 @@ def dashboard():
     else:
         return "you are not logged in"
     
-@route('/bb/:blog_name', method='GET')
+@route('/bb/:blog_name')
 def blog(blog_name):
 
     conn = connectDB()
@@ -148,8 +148,6 @@ def blog(blog_name):
     fetched = c.fetchall()
     
     return template('blog', rows = fetched)
-    
-    
     
         
 @route('/logout')
