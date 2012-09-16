@@ -1,0 +1,24 @@
+#main {
+    
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0;
+	/*background-color: #abcdef; */
+	width: 812px;
+}
+
+.day_entry {
+	font-family: Georgia;
+	font-size: 14px;
+	width: 350px;
+	text-align: justify;
+	line-height: 20px;
+	margin: 20px auto 60px auto;
+	background-color: white;
+	display: block;
+	vertical-align: top;
+}
+
+.entry {
+
+}

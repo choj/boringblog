@@ -1,10 +1,26 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/static/style.css" />
+</head>
+<body>
 
-%#template to generate a HTML table from a list of tuples (or list of lists, or tuple of tuples or ...)
-
-<table border="1">
-%for row in rows:
-  <tr>
-    <td>{{row[2][0:10]}}<br />{{row[4]}}</td>
-  </tr>
+<div id="main">
+%prev_date = "0000-00-00"
+%for post in posts:
+%   if post[0] == prev_date:
+<br />
+<center>~</center><br />
+{{post[1]}}
+%   else:
+</div>
+<div class="day_entry">
+{{post[0]}}<br /><br />
+{{post[1]}}
+%   prev_date = post[0]
 %end
-</table>
+%end
+
+
+</div>
+</body>
+</html>

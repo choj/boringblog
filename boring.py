@@ -2,6 +2,7 @@ import sqlite3
 import re
 import datetime
 import hashlib
+import time
 from bottle import route, run, debug, template, request, validate, static_file, error, app, redirect, post, get
 from beaker.middleware import SessionMiddleware
 
@@ -146,8 +147,18 @@ def blog(blog_name):
     
     c.execute("SELECT * FROM post WHERE user_id=?", (id,))
     fetched = c.fetchall()
+    fetched.reverse()
     
-    return template('blog', rows = fetched)
+    # convert to posts, dates
+    posts = []
+    for row in fetched:
+        post_date = time.strftime("%d %B %Y", time.strptime(row[2][0:10], "%Y-%m-%d"))
+        if post_date[0] == "0":
+            post_date = post_date[1:]
+        post_body = row[4]
+        posts.append([post_date, post_body])
+    
+    return template('blog', posts = posts)
     
         
 @route('/logout')
@@ -163,6 +174,10 @@ def validateEmail(email):
         if re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) != None:
             return True
     return False
+
+@route('/static/<filename>')
+def server_static(filename):
+    return static_file(filename, root='./static/')
     
         
 debug(True)
