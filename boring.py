@@ -134,7 +134,7 @@ def dashboard():
         return template('dashboard', email = s['email'], user_id = s['user_id'])
         
     else:
-        return "you are not logged in"
+        redirect("/login")
     
 @route('/bb/:blog_name')
 def blog(blog_name):
